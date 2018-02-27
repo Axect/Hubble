@@ -1,28 +1,32 @@
+{-# LANGUAGE ConstraintKinds #-}
+
 import Graphics.Rendering.Chart.Easy
 import Graphics.Rendering.Chart.Backend.Cairo
 import Autodiff
 
+type Scientific a = (Floating a, Ord a)
+
 -- Unit Conversion
-year :: (Floating a,Ord a) => a
-parsec :: (Floating a,Ord a) => a
-hubbleInverse :: (Floating a,Ord a) => a
+year :: Scientific a => a
+parsec :: Scientific a => a
+hubbleInverse :: Scientific a => a
 year = 60 * 60 * 24 * 365
 parsec = 3.086e+13
 hubbleInverse = 10 ** 6 * parsec / (70 * year) -- year
 
 -- Omega
-wrad :: (Floating a,Ord a) => a
-wmat :: (Floating a,Ord a) => a
-wvac :: (Floating a,Ord a) => a
+wrad :: Scientific a => a
+wmat :: Scientific a => a
+wvac :: Scientific a => a
 wrad = 1/3
 wmat = 0
 wvac = -1
 
 -- Formula
-wexp :: (Floating a,Ord a) => a -> a
+wexp :: Scientific a => a -> a
 wexp omega = 2 / (3*(1+omega))
 
-a :: (Floating a,Ord a) => a -> a
+a :: Scientific a => a -> a
 a t | t>0 && t<=47000 = 1/hubbleInverse ** w1 * t ** w1
     | t>47000 && t<=9.8*10**10 = 1/hubbleInverse ** w2 * t ** w2
     | otherwise = 1/hubbleInverse * exp t
